@@ -3,44 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi Audio Player</title>
+    <title>AEROMamba: Efficient Super-Resolution</title>
     <style>
-        .audio-container {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            margin: 20px;
-            width: 18%;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
         }
 
-        .audio-player-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-        }
-
-        .audio-container select,
-        .audio-container audio {
-            margin: 10px 0;
+        h1 {
+            text-align: center;
+            color: #2c3e50;
         }
 
         h2 {
             text-align: center;
+            color: #34495e;
+        }
+
+        .audio-player-row {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .audio-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+            width: 18%;
+            padding: 15px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .audio-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .audio-container h3 {
+            margin: 0 0 10px;
+            color: #e67e22;
+        }
+
+        .audio-container select,
+        .audio-container audio {
             width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .audio-container select:focus,
+        .audio-container audio:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .audio-container option {
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .audio-container {
+                width: 100%;
+                margin: 10px 0;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Audio Player</h1>
+    <h1>AEROMamba: Efficient Super-Resolution</h1>
     
     <!-- WAV Players Section -->
-    <h2>WAV Players</h2>
+    <h2>Bandlimited Audio Examples</h2>
     <div class="audio-player-row" id="wav-players">
         <!-- 5 Players for WAV files will be generated here -->
     </div>
 
     <!-- MP3 Players Section -->
-    <h2>MP3 Players</h2>
+    <h2>MP3 Encoded Audio Examples</h2>
     <div class="audio-player-row" id="mp3-players">
         <!-- 5 Players for MP3 files will be generated here -->
     </div>
