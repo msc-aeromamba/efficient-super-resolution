@@ -3,52 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio Player</title>
+    <title>Multi Audio Player</title>
     <style>
         .audio-container {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             margin: 20px;
+            width: 18%;
+        }
+
+        .audio-player-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
         }
 
         .audio-container select,
         .audio-container audio {
             margin: 10px 0;
         }
+
+        h2 {
+            text-align: center;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
     <h1>Audio Player</h1>
-    <div class="audio-container">
-        <label for="audio-select">Select Audio File:</label>
-        <select id="audio-select" onchange="playSelectedAudio()">
-            <option value="" disabled selected>Select an audio file</option>
-        </select>
-        <audio id="audio-player" controls></audio>
+    
+    <!-- WAV Players Section -->
+    <h2>WAV Players</h2>
+    <div class="audio-player-row" id="wav-players">
+        <!-- 5 Players for WAV files will be generated here -->
+    </div>
+
+    <!-- MP3 Players Section -->
+    <h2>MP3 Players</h2>
+    <div class="audio-player-row" id="mp3-players">
+        <!-- 5 Players for MP3 files will be generated here -->
     </div>
 
     <script>
-        // Fetch audio files from the JSON file
-        fetch('audioFiles.json')
-            .then(response => response.json())
-            .then(audioFiles => {
-                const audioSelect = document.getElementById('audio-select');
-                
-                // Populate the dropdown with audio files
-                audioFiles.forEach(file => {
-                    const option = document.createElement('option');
-                    option.value = file;
-                    option.textContent = file.split('/').pop(); // Display only the file name
-                    audioSelect.appendChild(option);
-                });
-            })
-            .catch(error => console.error('Error loading audio files:', error));
+        // Configuration for each player
+        const wavPlayerConfig = [
+            { id: 'wav1', jsonFile: 'json/wav/hr/hr.json', methodName: 'High-Resolution' },
+            { id: 'wav2', jsonFile: 'json/wav/lr/lr.json', methodName: 'Low-Resolution' },
+            { id: 'wav3', jsonFile: 'json/wav/aero/aero.json', methodName: 'AERO' },
+            { id: 'wav4', jsonFile: 'json/wav/mamba/mamba.json', methodName: 'AEROMamba' },
+            { id: 'wav5', jsonFile: 'json/wav/mamba_paqm/mamba_paqm.json', methodName: 'AEROMamba-PAQM' }
+        ];
 
-        // Function to play the selected audio file
-        function playSelectedAudio() {
-            const audioPlayer = document.getElementById('audio-player');
-            const audioSelect = document.getElementById('audio-select');
+        const mp3PlayerConfig = [
+            { id: 'mp31', jsonFile: 'json/mp3/hr/hr.json', methodName: 'High-Resolution' },
+            { id: 'mp32', jsonFile: 'json/mp3/lr/lr.json', methodName: 'Low-Resolution' },
+            { id: 'mp33', jsonFile: 'json/mp3/mamba/mamba.json', methodName: 'AEROMamba' },
+            { id: 'mp34', jsonFile: 'json/mp3/mamba_paqm/mamba_paqm.json', methodName: 'AEROMamba-PAQM' },
+            { id: 'mp35', jsonFile: 'json/mp3/mamba_paqm++/mamba_paqm++.json', methodName: 'AEROMamba-PAQM++' }
+        ];
+
+        // Function to create an audio player container
+        function createAudioPlayerContainer(config, containerId) {
+            const container = document.createElement('div');
+            container.className = 'audio-container';
+            container.innerHTML = `
+                <h3>${config.methodName}</h3> <!-- Display the method name -->
+                <label for="${config.id}-select">Select Audio File:</label>
+                <select id="${config.id}-select" onchange="playSelectedAudio('${config.id}')">
+                    <option value="" disabled selected>Select an audio file</option>
+                </select>
+                <audio id="${config.id}-player" controls></audio>
+            `;
+            document.getElementById(containerId).appendChild(container);
+
+            // Load audio files for this player
+            loadAudioFiles(config.id, config.jsonFile);
+        }
+
+        // Function to load audio files based on the JSON file
+        function loadAudioFiles(playerId, jsonFile) {
+            fetch(jsonFile)
+                .then(response => response.json())
+                .then(audioFiles => {
+                    const audioSelect = document.getElementById(`${playerId}-select`);
+                    audioSelect.innerHTML = '<option value="" disabled selected>Select an audio file</option>'; // Reset dropdown
+
+                    // Populate the dropdown with audio files
+                    audioFiles.forEach(file => {
+                        const option = document.createElement('option');
+                        option.value = file;
+                        option.textContent = file.split('/').pop(); // Display only the file name
+                        audioSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error(`Error loading audio files for ${playerId}:`, error));
+        }
+
+        // Function to play the selected audio file for the specific player
+        function playSelectedAudio(playerId) {
+            const audioPlayer = document.getElementById(`${playerId}-player`);
+            const audioSelect = document.getElementById(`${playerId}-select`);
             const selectedFile = audioSelect.value;
 
             if (selectedFile) {
@@ -56,6 +111,12 @@
                 audioPlayer.play();
             }
         }
+
+        // Create WAV players
+        wavPlayerConfig.forEach(config => createAudioPlayerContainer(config, 'wav-players'));
+
+        // Create MP3 players
+        mp3PlayerConfig.forEach(config => createAudioPlayerContainer(config, 'mp3-players'));
     </script>
 </body>
 </html>
