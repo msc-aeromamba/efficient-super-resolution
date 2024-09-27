@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Player</title>
+    <style>
+        .audio-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin: 20px;
+        }
+
+        .audio-container select,
+        .audio-container audio {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Audio Player</h1>
+    <div class="audio-container">
+        <label for="audio-select">Select Audio File:</label>
+        <select id="audio-select" onchange="playSelectedAudio()">
+            <option value="" disabled selected>Select an audio file</option>
+        </select>
+        <audio id="audio-player" controls></audio>
+    </div>
+
+    <script>
+        // Fetch audio files from the JSON file
+        fetch('audioFiles.json')
+            .then(response => response.json())
+            .then(audioFiles => {
+                const audioSelect = document.getElementById('audio-select');
+                
+                // Populate the dropdown with audio files
+                audioFiles.forEach(file => {
+                    const option = document.createElement('option');
+                    option.value = file;
+                    option.textContent = file.split('/').pop(); // Display only the file name
+                    audioSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error loading audio files:', error));
+
+        // Function to play the selected audio file
+        function playSelectedAudio() {
+            const audioPlayer = document.getElementById('audio-player');
+            const audioSelect = document.getElementById('audio-select');
+            const selectedFile = audioSelect.value;
+
+            if (selectedFile) {
+                audioPlayer.src = selectedFile;
+                audioPlayer.play();
+            }
+        }
+    </script>
+</body>
+</html>
